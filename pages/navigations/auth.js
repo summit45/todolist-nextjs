@@ -16,7 +16,6 @@ const Auth = () => {
             mounted.current = true;
         }
         else{
-            console.log('login executed');
             router.replace('/');
         }
     }, [validLoggedIn]);
@@ -52,7 +51,7 @@ const Auth = () => {
     return (
         <div>
             <p>LoginPage</p>
-            <form onSubmit={ onSubmit }>
+            <form onSubmit={ onSubmit } className="container">
                 <input 
                     name="email" 
                     type="email"
@@ -60,6 +59,7 @@ const Auth = () => {
                     required 
                     value={ email } 
                     onChange={ onChange }
+                    className="authInput"
                 />
                 <input 
                     name="password" 
@@ -68,16 +68,18 @@ const Auth = () => {
                     required 
                     value={ password } 
                     onChange={ onChange } 
+                    className="authInput"
                 />
                 <input 
                     name="submit" 
                     type="submit"
                     value={ newAccount ? "CreateAccount" : "Sign In" }
                     onSubmit={ onSubmit }
+                    className="authInput authSubmit"
                 />
-                <p>{ error }</p>
+                { error  && <span className="authError">{error}</span>}
             </form>
-            <span onClick={toggleAccount}>
+            <span onClick={toggleAccount} className="authSwitch">
                 {newAccount ? "Sign in" : "Create Account"}
             </span>
         </div>
