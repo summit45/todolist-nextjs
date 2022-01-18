@@ -45,12 +45,11 @@ const Todolist = ({ listObj, isOwner }) => {
         }
 
         else if (name === "commentbtn") {
-            console.log(listObj.randomidx);
             const listObjComment = {
                 text: comment,
                 createdAt: Date.now(),
                 userBoolean: isOwner,
-                whichText: listObj.randomidx,
+                randomidx: listObj.randomidx,
             };
             await dbService.collection("comments").add(listObjComment);
             setComment(""); // submit하고 나서 빈문자열로 바꿔주기

@@ -311,5 +311,21 @@ form{
 }
 
 .comment h4 {
-  font-size: 14px;
+  font-size: 12px;
+}
+
+.comment_actions {
+  margin-bottom: 20px;
+  background-color: rgb(159, 121, 168);
+  width: 100%;
+  max-width: 320px;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  color: rgba(255, 255, 255, 0.8);
+  position: absolute;
+  right: 10px;
+  top: 10px;
 }
