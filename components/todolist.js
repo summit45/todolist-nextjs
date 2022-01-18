@@ -48,7 +48,7 @@ const Todolist = ({ listObj, isOwner }) => {
             const listObjComment = {
                 text: comment,
                 createdAt: Date.now(),
-                userBoolean: isOwner,
+                creatorId: listObj.creatorId,
                 randomidx: listObj.randomidx,
             };
             await dbService.collection("comments").add(listObjComment);
@@ -150,6 +150,7 @@ const Todolist = ({ listObj, isOwner }) => {
                 {comments.map((comment) => (
                     <Comment
                         listObjComment={comment}
+                        isOwner={comment.creatorId === listObj.creatorId}
                         listObj={listObj}
                     />
                 ))}

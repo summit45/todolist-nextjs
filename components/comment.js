@@ -3,27 +3,28 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
 import { dbService, storageService } from '/src/firebase/firebase.js';
 
-const Comment = ({ listObjComment,listObj }) => {
+const Comment = ({ listObjComment, listObj }) => {
 
     const [isText, setIsText] = useState(true);
+    const [isOwner, setIsOwner] = useState(false);
     const [editing, setEditing] = useState(false);
     const [newlist, setNewList] = useState(listObjComment.text);
-    const [isOwner, setIsOwner] = useState(true);
+    
 
     useEffect(() => {
         if (listObjComment.randomidx === listObj.randomidx) {
             setIsText(true);
-            console.log(listObjComment.text + isText);
+            if (listObjComment.creatorId === listObj.creatorId){
+                setIsOwner(true);
+            }
+            else {
+                setIsOwner(false);
+            }
         }
         else {
             setIsText(false);
         }
-        if (listObjComment.userBoolean) {
-            setIsOwner(true);
-        }
-        else {
-            setIsOwner(true);
-        }
+        
     });
 
     const onDeleteClick = async () => {
@@ -82,7 +83,7 @@ const Comment = ({ listObjComment,listObj }) => {
                                     </span>
                                 </div>
                             </>
-                                )}
+                            )}
                         </form>
                     )}
                 </>
