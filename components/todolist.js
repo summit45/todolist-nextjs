@@ -97,7 +97,6 @@ const Todolist = ({ listObj, isOwner }) => {
                         {
                             commenting ? (
                                 <>
-                                    {isOwner && (
                                         <>
                                             <form name="commentbtn" onSubmit={onSubmit} className="container todolistEdit">
                                                 <input
@@ -112,7 +111,6 @@ const Todolist = ({ listObj, isOwner }) => {
                                             </form>
                                             <button onClick={toggleCommenting} className="formBtn cancelBtn">Cancel</button>
                                         </>)
-                                    }
                                 </>
 
                             ) : (
@@ -122,7 +120,7 @@ const Todolist = ({ listObj, isOwner }) => {
 
                             )
                         }
-                        <h4>{listObj.text}</h4><br></br>
+                        <h4>{listObj.text}</h4>
                         {listObj.attachmentUrl && (
                             <img src={listObj.attachmentUrl} width="50px" height="50px" />
                         )}

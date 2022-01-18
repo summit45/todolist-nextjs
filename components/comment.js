@@ -5,44 +5,22 @@ import { dbService, storageService } from '/src/firebase/firebase.js';
 
 const Comment = ({ listObjComment, listObj }) => {
 
-    const [isOwner, setIsOwner] = useState(false);
     const [isText, setIsText] = useState(false);
     const [editing, setEditing] = useState(false);
     const [newlist, setNewList] = useState(listObjComment.text);
-    const [comments, setComments] = useState([]); // 하나의 글에 대한 댓글목록
-    
-     // 댓글 실시간 구현
-     useEffect(() => {
-        dbService.collection("comments").onSnapshot(snapshot => {
-            const listArrayComment = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            setComments(listArrayComment);
-        });
-    }, []);
 
     useEffect(() => {
         if (listObjComment.whichText === listObj.randomidx) {
             setIsText(true);
+            console.log(listObjComment.text + isText);
         }
         else {
             setIsText(false);
         }
-
-        if (listObjComment.userBoolean) {
-            setIsOwner(true);
-        }
-        else {
-            setIsOwner(false);
-        }
-        console.log(listObjComment.text + isText);
-        console.log(listObjComment.text + isOwner +"owner");
-    }, []);
+    });
 
     const onDeleteClick = async () => {
-        const ok = window.confirm("Are you sure you want to delete this nweet?");
-        console.log(ok);
+        const ok = window.confirm("Are you sure you want to delete this comment?");
         if (ok) {
             await dbService.doc(`comments/${listObjComment.id}`).delete();
         }
@@ -50,7 +28,7 @@ const Comment = ({ listObjComment, listObj }) => {
     const toggleEditing = () => setEditing((prev) => !prev);
     const onSubmit = async (event) => {
         event.preventDefault();
-        await dbService.doc(`todolists/${listObj.id}`).update({
+        await dbService.doc(`comments/${listObjComment.id}`).update({
             text: newlist,
         });
         setEditing(false);
@@ -67,17 +45,17 @@ const Comment = ({ listObjComment, listObj }) => {
                     <>
                         {isOwner && (
                             <>
-                                <form onSubmit={onSubmit}>
+                                <form onSubmit={onSubmit} className="container todolistEdit">
                                     <input
                                         type="text"
-                                        placeholder="Edit your todolist"
+                                        placeholder="Edit your comment"
                                         value={newlist}
                                         required
                                         onChange={onChange}
                                     />
-                                    <input type="submit" value="Update todolist" />
+                                    <input type="submit" value="Update comment" className="formBtn" />
                                 </form>
-                                <button onClick={toggleEditing}>Cancel</button>
+                                <button onClick={toggleEditing} className="formBtn cancelBtn">Cancel</button>
                             </>)
                         }
                     </>
