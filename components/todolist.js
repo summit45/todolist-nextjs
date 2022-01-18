@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 import { dbService, storageService } from '/src/firebase/firebase.js';
 import Comment from "/components/comment";
 
-const Todolist = ({ listObj, isOwner }) => {
+const Todolist = ({ TodoListObj, isOwner }) => {
 
     const [editing, setEditing] = useState(false);
     const [commenting, setCommenting] = useState(false);
-    const [newlist, setNewList] = useState(listObj.text);
+    const [newlist, setNewList] = useState(TodoListObj.text);
     const [comment, setComment] = useState(""); // 현재 쓰는 댓글
     const [comments, setComments] = useState([]); // 하나의 글에 대한 댓글목록
 
@@ -26,8 +26,8 @@ const Todolist = ({ listObj, isOwner }) => {
     const onDeleteClick = async () => { // 삭제 버튼
         const ok = window.confirm("Are you sure you want to delete this nweet?");
         if (ok) {
-            await dbService.doc(`todolists/${listObj.id}`).delete();
-            await storageService.refFromURL(listObj.attachmentUrl).delete();
+            await dbService.doc(`todolists/${TodoListObj.id}`).delete();
+            await storageService.refFromURL(TodoListObj.attachmentUrl).delete();
         }
     }
 
@@ -38,20 +38,20 @@ const Todolist = ({ listObj, isOwner }) => {
         event.preventDefault();
         const { target: { name } } = event;
         if (name === "editbtn") {
-            await dbService.doc(`todolists/${listObj.id}`).update({
+            await dbService.doc(`todolists/${TodoListObj.id}`).update({
                 text: newlist,
             });
             setEditing(false);
         }
 
         else if (name === "commentbtn") {
-            const listObjComment = {
+            const CommentObj = {
                 text: comment,
                 createdAt: Date.now(),
-                creatorId: listObj.creatorId,
-                randomidx: listObj.randomidx,
+                creatorId: TodoListObj.creatorId,
+                randomidx: TodoListObj.randomidx,
             };
-            await dbService.collection("comments").add(listObjComment);
+            await dbService.collection("comments").add(CommentObj);
             setComment(""); // submit하고 나서 빈문자열로 바꿔주기
         }
     };
@@ -119,9 +119,9 @@ const Todolist = ({ listObj, isOwner }) => {
 
                             )
                         }
-                        <h4>{listObj.text}</h4>
-                        {listObj.attachmentUrl && (
-                            <img src={listObj.attachmentUrl} width="50px" height="50px" />
+                        <h4>{TodoListObj.text}</h4>
+                        {TodoListObj.attachmentUrl && (
+                            <img src={TodoListObj.attachmentUrl} width="50px" height="50px" />
                         )}
                         {isOwner && (
                             <div className="todolist_actions">
@@ -149,9 +149,8 @@ const Todolist = ({ listObj, isOwner }) => {
             <div>
                 {comments.map((comment) => (
                     <Comment
-                        listObjComment={comment}
-                        isOwner={comment.creatorId === listObj.creatorId}
-                        listObj={listObj}
+                        CommentObj={comment}
+                        TodoListObj={TodoListObj}
                     />
                 ))}
             </div>

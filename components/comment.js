@@ -3,18 +3,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
 import { dbService, storageService } from '/src/firebase/firebase.js';
 
-const Comment = ({ listObjComment, listObj }) => {
+const Comment = ({ CommentObj, TodoListObj }) => {
 
     const [isText, setIsText] = useState(true);
     const [isOwner, setIsOwner] = useState(false);
     const [editing, setEditing] = useState(false);
-    const [newlist, setNewList] = useState(listObjComment.text);
-    
+    const [newlist, setNewList] = useState(CommentObj.text);
 
     useEffect(() => {
-        if (listObjComment.randomidx === listObj.randomidx) {
+        if (CommentObj.randomidx === TodoListObj.randomidx) {
             setIsText(true);
-            if (listObjComment.creatorId === listObj.creatorId){
+            if (CommentObj.creatorId === TodoListObj.creatorId){
                 setIsOwner(true);
             }
             else {
@@ -30,13 +29,13 @@ const Comment = ({ listObjComment, listObj }) => {
     const onDeleteClick = async () => {
         const ok = window.confirm("Are you sure you want to delete this comment?");
         if (ok) {
-            await dbService.doc(`comments/${listObjComment.id}`).delete();
+            await dbService.doc(`comments/${CommentObj.id}`).delete();
         }
     }
     const toggleEditing = () => setEditing((prev) => !prev);
     const onSubmit = async (event) => {
         event.preventDefault();
-        await dbService.doc(`comments/${listObjComment.id}`).update({
+        await dbService.doc(`comments/${CommentObj.id}`).update({
             text: newlist,
         });
         setEditing(false);
@@ -71,7 +70,7 @@ const Comment = ({ listObjComment, listObj }) => {
                 <> 
                     {isText && (
                         <form className="comment">
-                            <h4>{listObjComment.text}</h4>
+                            <h4>{CommentObj.text}</h4>
                             {isOwner && (
                             <>
                                 <div className="todolist_actions">

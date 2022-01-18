@@ -28,14 +28,14 @@ const Main = ({ userObj }) => {
             const response = await attachmentRef.putString(attachment, "data_url");
             attachmentUrl = await response.ref.getDownloadURL();
         }
-        const listObj = {
+        const TodoListObj = {
             randomidx: Math.random(), // 어떤 글에 대한 답글인지, key사용하면 삭제
             text: todolist,
             createdAt: Date.now(),
             creatorId: userObj.uid,
             attachmentUrl,
         };
-        await dbService.collection("todolists").add(listObj);
+        await dbService.collection("todolists").add(TodoListObj);
         setTodolist(""); // submit하고 나서 빈문자열로 바꿔주기
         setAttachment("");
     };
@@ -107,7 +107,7 @@ const Main = ({ userObj }) => {
                 {todolists.map((todolist) => (
                     <Todolist
                         key={todolist.id}
-                        listObj={todolist}
+                        TodoListObj={todolist}
                         isOwner={todolist.creatorId === userObj.uid}
                     />
                 ))}
