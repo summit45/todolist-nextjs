@@ -1,35 +1,22 @@
-import { faComment, faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
-import { dbService, storageService } from '/src/firebase/firebase.js';
+import { dbService } from '/src/firebase/firebase.js';
 
-const Comment = ({ CommentObj, TodoListObj }) => {
+const Comment = ({ CommentObj, isOwner, isText }) => {
 
-    const [isText, setIsText] = useState(true);
-    const [isOwner, setIsOwner] = useState(false);
     const [editing, setEditing] = useState(false);
     const [newlist, setNewList] = useState(CommentObj.text);
-
-    useEffect(() => {
-        if (CommentObj.randomidx === TodoListObj.randomidx) {
-            setIsText(true);
-            if (CommentObj.creatorId === TodoListObj.creatorId){
-                setIsOwner(true);
-            }
-            else {
-                setIsOwner(false);
-            }
-        }
-        else {
-            setIsText(false);
-        }
-        
-    });
-
+    
     const onDeleteClick = async () => {
-        const ok = window.confirm("Are you sure you want to delete this comment?");
-        if (ok) {
-            await dbService.doc(`comments/${CommentObj.id}`).delete();
+        if (isOwner){
+            const ok = window.confirm("Are you sure you want to delete this comment?");
+            if (ok) {
+                await dbService.doc(`comments/${CommentObj.id}`).delete();
+            }
+        }
+        else{
+            const ok2 = window.confirm("You can't delete.");
         }
     }
     const toggleEditing = () => setEditing((prev) => !prev);
@@ -68,7 +55,32 @@ const Comment = ({ CommentObj, TodoListObj }) => {
                 </>
             ) : (
                 <> 
-                    {isText && (
+                    { isText && (
+                        <form className="comment">
+                            <h4>{CommentObj.text}</h4>
+                            <>
+                                <div className="todolist_actions">
+                                    <span onClick={onDeleteClick}>
+                                        <FontAwesomeIcon icon={faTrash} />
+                                    </span>
+                                    <span onClick={toggleEditing}>
+                                        <FontAwesomeIcon icon={faPencilAlt} />
+                                    </span>
+                                </div>
+                            </>
+                        </form>
+                    )}
+                </>
+            )
+        }
+        </div> 
+    );
+};
+
+export default Comment;
+
+
+/*{isText && (
                         <form className="comment">
                             <h4>{CommentObj.text}</h4>
                             {isOwner && (
@@ -82,14 +94,4 @@ const Comment = ({ CommentObj, TodoListObj }) => {
                                     </span>
                                 </div>
                             </>
-                            )}
-                        </form>
-                    )}
-                </>
-            )
-        }
-        </div> 
-    );
-};
-
-export default Comment;
+                            )}*/

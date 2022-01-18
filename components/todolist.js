@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { dbService, storageService } from '/src/firebase/firebase.js';
 import Comment from "/components/comment";
 
-const Todolist = ({ TodoListObj, isOwner }) => {
+const Todolist = ({ TodoListObj, isOwner, userObj }) => {
 
     const [editing, setEditing] = useState(false);
     const [commenting, setCommenting] = useState(false);
@@ -48,7 +48,7 @@ const Todolist = ({ TodoListObj, isOwner }) => {
             const CommentObj = {
                 text: comment,
                 createdAt: Date.now(),
-                creatorId: TodoListObj.creatorId,
+                creatorId: userObj.uid,
                 randomidx: TodoListObj.randomidx,
             };
             await dbService.collection("comments").add(CommentObj);
@@ -149,8 +149,10 @@ const Todolist = ({ TodoListObj, isOwner }) => {
             <div>
                 {comments.map((comment) => (
                     <Comment
+                        key={comment.id}
                         CommentObj={comment}
-                        TodoListObj={TodoListObj}
+                        isOwner={comment.creatorId === userObj.uid}
+                        isText={comment.randomidx === TodoListObj.randomidx}
                     />
                 ))}
             </div>

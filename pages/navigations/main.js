@@ -109,6 +109,7 @@ const Main = ({ userObj }) => {
                         key={todolist.id}
                         TodoListObj={todolist}
                         isOwner={todolist.creatorId === userObj.uid}
+                        userObj={userObj}
                     />
                 ))}
             </div>
